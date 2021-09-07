@@ -1,12 +1,9 @@
 
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <functional>
-// #include <filesystem>
 #include <chrono>
 #include <map>
-#include <numeric>
 
 #include <agp/algo/ghosh_algorithm.h>
 #include <agp/algo/fisk_algorithm.h>
@@ -18,9 +15,11 @@
 #include <dirent.h>
 
 void instruction(const std::string &message = "") {
-    if (message != "") std::cerr << "ERROR: " << message << "\n";
+    if (!message.empty()) {
+        std::cerr << "ERROR: " << message << "\n";
+    }
     std::vector<std::string> alg_flags = { "-fisk", "-ghosh", "-couto", "-baumgartner" };
-    std::cerr << "./main.cpp [instances_dir] [algorithm_flag] [output_file]\nAvailable algorithm flags ";
+    std::cerr << "./main [instances_dir] [algorithm_flag] [output_file]\nAvailable algorithm flags ";
     for (const auto &flag: alg_flags)
         std::cerr << flag << " ";
     std::cerr << "\n";
@@ -29,7 +28,9 @@ void instruction(const std::string &message = "") {
 std::vector<std::string> read_directory(const std::string& name) {
     std::vector<std::string> files;
     DIR* dirp = opendir(name.c_str());
-    if (!dirp) instruction("instances_dir \"" + name + "\" doesn't exist");
+    if (!dirp) {
+        instruction("instances_dir \"" + name + "\" doesn't exist");
+    }
     struct dirent * dp;
     while ((dp = readdir(dirp)) != nullptr) {
         if (dp->d_name == "" || dp->d_name[0] == '.') continue;
@@ -74,12 +75,9 @@ std::vector<Kernel::Point_2> find_guards (std::vector<Kernel::Point_2> &points, 
 
 
 void time_experiment (const std::string &dir_path, const std::string &algorithm, const std::string &output_file) {
-    // for(auto& p: std::filesystem::directory_iterator(dir_path))
-    //    std::cout << p << '\n';
-
 
     std::ofstream ef;
-    ef.open ("exceptions.out");
+    ef.open("exceptions.out");
     std::map<unsigned, std::vector<double>> results;
     auto files = read_directory(dir_path);
     std::cerr << "Instances from directory " << dir_path << ": " << files.size() << "\n";
@@ -119,8 +117,9 @@ void time_experiment (const std::string &dir_path, const std::string &algorithm,
     for (auto &result : results) {
         std::cerr << result.first << " vertices, " << result.second.size() << " instances\n";
         double sum = 0;
-        for(const auto &r: result.second)
+        for(const auto &r: result.second) {
             sum += r;
+        }
         times[result.first] = sum / (double) result.second.size();
     }
 
@@ -154,33 +153,5 @@ int main (int argc, char *argv[]) {
     time_experiment(dir_name, algorithm, output_file);
     // iterations_and_solutions(dir_name, algorithm);
 
-    // std::ifstream in(filename);
-    // std::vector<Kernel::Point_2> kp;
-    /*
-    int n;
-    in >> n;
-    for (int i = 0; i < n; ++i) {
-        Kernel::Point_2 p;
-        in >> p;
-        kp.push_back(p);
-    }
-*/
-    /*
-    if (!in.eof()) {
-        int m;
-        in >> m;
-        for (int i = 0; i < m; ++i) {}
-    }
-    */
-/*
-    if (algorithm == "-fisk") {
-        auto output = fisk(kp);
-        plot_fisk(output, std::cerr);
-    } else {
-        auto guards = find_guards(kp, algorithm);
-        plot_polygon(kp, std::cerr);
-        plot_guards(guards, std::cerr);
-    }
-*/
     return 0;
 }
