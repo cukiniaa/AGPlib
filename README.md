@@ -8,9 +8,9 @@ _Given a gallery or a museum find the minimum number of guards/cameras to watch 
 
 A gallery is represented as a simple polygon \f$P\f$ without holes and guards as a set of points of \f$P\f$. In this library we sovle the AGP for stationary guards that can be placed, both in the vertices of the polygon or in its interior. 
 
-\image html couto-60-20-polygon.png An example of a gallery. width=500cm
+\image html images/couto-60-20-polygon.png An example of a gallery. width=500cm
 
-\image html couto-60-20-guarded.png A solution for the given gallery. width=500cm
+\image html images/couto-60-20-guarded.png A solution for the given gallery. width=500cm
 
 ## Algorithms
 
