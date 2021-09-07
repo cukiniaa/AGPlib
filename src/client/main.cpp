@@ -1,6 +1,4 @@
-
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <functional>
 
@@ -16,7 +14,7 @@
 std::vector<std::string> alg_flags = { "-fisk", "-ghosh", "-couto", "-baumgartner" };
 
 void instruction() {
-    std::cerr << "./main.cpp filename algorithm\nAvailable algorithm flags ";
+    std::cerr << "./main filename algorithm\nAvailable algorithm flags ";
     for (const auto &flag: alg_flags)
         std::cerr << flag << " ";
     std::cerr << "\n";
