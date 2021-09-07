@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 pylab.rcParams.update({'font.size': 40})
-opt_res_filename = 'results/experiment-all-20-600-couto-new.out'
+opt_res_filename = '../results/experiment-all-20-600-couto-new.out'
 
 
 def to_int_array(arr):
