@@ -8,9 +8,9 @@ _Given a gallery or a museum find the minimum number of guards/cameras to watch 
 
 A gallery is represented as a simple polygon \f$P\f$ without holes and guards as a set of points of \f$P\f$. In this library we sovle the AGP for stationary guards that can be placed, both in the vertices of the polygon or in its interior. 
 
-\image html couto-60-20-polygon.png An example of a gallery. width=300cm
+\image html couto-60-20-polygon.png An example of a gallery. width=500cm
 
-\image html couto-60-20-guarded.png A solution for the given gallery. width=300cm
+\image html couto-60-20-guarded.png A solution for the given gallery. width=500cm
 
 ## Algorithms
 
@@ -31,4 +31,15 @@ The library consists of four modules:
 - arrangement - a module to handle gallery shapes,
 - cplex - a wrap for the CPLEX package,
 - plot - a module to plot algorithms results.
+
+## Documentation
+
+To generate the documentation using doxygen run:
+
+```console
+$ doxygen Doxyfile 
+```
+
+Two documentation formats will be available: html and latex. Both formats are located in `documentation` directory. In order to view the html documentation, type `<path-to-repo>/documentation/html/index.html` in your browser.
+
 
