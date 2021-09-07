@@ -15,8 +15,9 @@ std::vector<Kernel::Point_2> get_instance_from_file (std::ifstream &in) {
     return points;
 }
 
+
 TEST_CASE( "Triangulate a polygon (20 vertices)" ) {
-    std::string filename = "../../../instances/ortho-20/rand-20-1.pol";
+    std::string filename = "./instances/rand-20-1.pol";
     std::ifstream in(filename);
     REQUIRE(in);
     auto points = get_instance_from_file(in);
@@ -34,7 +35,7 @@ TEST_CASE( "Triangulate a polygon (20 vertices)" ) {
 
 
 TEST_CASE( "Triangulate a polygon (200 vertices)" ) {
-    std::string filename = "../../../instances/ortho-20-200/rand-200-66.pol";
+    std::string filename = "./instances/rand-200-66.pol";
     std::ifstream in(filename);
     REQUIRE(in);
     auto points = get_instance_from_file(in);
@@ -49,6 +50,7 @@ TEST_CASE( "Triangulate a polygon (200 vertices)" ) {
         REQUIRE(vertices.size() == 3);
     }
 }
+
 
 TEST_CASE ( "Convex components (simple example) ") {
     std::vector<Kernel::Point_2> points = {
@@ -66,8 +68,9 @@ TEST_CASE ( "Convex components (simple example) ") {
     }
 }
 
+
 TEST_CASE ( "Convex components (20 vertices) ") {
-    std::string filename = "../../../instances/ortho-20/rand-20-1.pol";
+    std::string filename = "./instances/rand-20-1.pol";
     std::ifstream in(filename);
     REQUIRE(in);
     auto points = get_instance_from_file(in);
@@ -78,8 +81,9 @@ TEST_CASE ( "Convex components (20 vertices) ") {
     }
 }
 
+
 TEST_CASE ( "Convex components (100 vertices) ") {
-    std::string filename = "../../../instances/ortho-20-200/rand-100-8.pol";
+    std::string filename = "./instances/rand-100-8.pol";
     std::ifstream in(filename);
     REQUIRE(in);
     auto points = get_instance_from_file(in);

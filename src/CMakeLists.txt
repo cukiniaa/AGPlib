@@ -21,6 +21,3 @@ add_subdirectory(agp)
 add_subdirectory(client)
 
 add_subdirectory(experiments)
-
-add_subdirectory(test)
-
