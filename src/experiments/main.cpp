@@ -74,72 +74,61 @@ std::vector<Kernel::Point_2> find_guards (std::vector<Kernel::Point_2> &points, 
 }
 
 
-void time_experiment (const std::string &dir_path, const std::string &algorithm, const std::string &output_file) {
+void run_experiment (const std::string &dir_path, const std::string &algorithm, const std::string &output_file) {
 
-    std::ofstream ef;
-    ef.open("exceptions.out");
+    std::ofstream out(output_file), ef("exceptions.out");
     std::map<unsigned, std::vector<double>> results;
     auto files = read_directory(dir_path);
-    std::cerr << "Instances from directory " << dir_path << ": " << files.size() << "\n";
+    std::cout << "Instances from directory " << dir_path << ": " << files.size() << "\n";
+
     int i = 0;
     for(const auto &f: files) {
         try {
-            i++;
             std::vector<Kernel::Point_2> points;
             test_case(f, points);
-            std::cerr << i << "/" << files.size() << " " << f << ": " << points.size() << " vertices.\n";
-            std::cout << f << " " << points.size() << " ";
+
+            std::cout << ++i << "/" << files.size() << " " << f << ": " << points.size() << " vertices.\n";
+
             auto t1 = std::chrono::high_resolution_clock::now();
-            find_guards(points, algorithm);
+            auto guards = find_guards(points, algorithm);
             auto t2 = std::chrono::high_resolution_clock::now();
             auto time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
 
-            std::cout << time_span.count() << "\n";
+            out << f << " " << points.size() << " " << guards.size() << " " << time_span.count() << "\n";
 
             auto n = points.size();
-            if (results.find(n) == results.end()) results[n] = std::vector<double>();
+            if (results.find(n) == results.end()) {
+                results[n] = std::vector<double>();
+            }
             results[n].push_back(time_span.count());
         } catch (const std::exception& e) {
             std::cerr << "Exception e caught!\n";
             std::cerr << e.what() << "\n";
             ef << f << " " << e.what() << "\n";
-            std::cout << "\n";
         } catch (...) {
             std::cerr << "Exception caught \n";
             ef << f << "\n";
-            std::cout << "\n";
         }
     }
 
+    out.close();
     ef.close();
 
+    /// Compute mean time
     std::map<unsigned, double> times;
     for (auto &result : results) {
-        std::cerr << result.first << " vertices, " << result.second.size() << " instances\n";
         double sum = 0;
         for(const auto &r: result.second) {
             sum += r;
         }
         times[result.first] = sum / (double) result.second.size();
+        std::cout << result.first << " vertices, " << result.second.size() << " instances, avg time: " << times[result.first] << "\n";
     }
 
-    std::cerr << "---------------------\n";
+    std::cout << "---------------------\n";
 
-    output_results(times, std::cerr);
-}
-
-void iterations_and_solutions (const std::string &dir_path, const std::string &algorithm) {
-    std::map<unsigned, std::vector<double>> results;
-    auto files = read_directory(dir_path);
-    std::cout << "Instances from directory " << dir_path << ": " << files.size() << "\n";
-    int i = 1;
-    for(const auto &f: files) {
-        std::vector<Kernel::Point_2> points;
-        test_case(f, points);
-        std::cout << i++ << "/" << files.size()  << " " << f << ": " << points.size() << " vertices.\n";
-        std::cerr << f << " ";
-        find_guards(points, algorithm);
-    }
+    // std::ofstream out_avg(avg_output_file);
+    // output_results(times, out_avg);
 }
 
 int main (int argc, char *argv[]) {
@@ -150,8 +139,7 @@ int main (int argc, char *argv[]) {
 
     std::string dir_name = argv[1], algorithm = argv[2], output_file = argv[3];
 
-    time_experiment(dir_name, algorithm, output_file);
-    // iterations_and_solutions(dir_name, algorithm);
+    run_experiment(dir_name, algorithm, output_file);
 
     return 0;
 }

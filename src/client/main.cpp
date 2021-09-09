@@ -14,7 +14,7 @@
 std::vector<std::string> alg_flags = { "-fisk", "-ghosh", "-couto", "-baumgartner" };
 
 void instruction() {
-    std::cerr << "./main filename algorithm\nAvailable algorithm flags ";
+    std::cerr << "./main in_filename algorithm [out_filename]\nAvailable algorithm flags ";
     for (const auto &flag: alg_flags)
         std::cerr << flag << " ";
     std::cerr << "\n";
@@ -35,17 +35,17 @@ std::vector<Kernel::Point_2> find_guards (const std::vector<Kernel::Point_2> &po
     }
 }
 
-void process(const std::string &algorithm, const std::vector<Kernel::Point_2> &points) {
+void process(const std::string &algorithm, const std::vector<Kernel::Point_2> &points, std::ostream &out) {
     auto polygon = create_arrangement<Arrangement_2>(points);
     if (algorithm == "-fisk-arr") {
         auto output = fisk_arrangement(points);
-        plot_fisk(output, std::cerr);
+        plot_fisk(output, out);
     } else {
         auto guards = find_guards(points, algorithm);
-        plot_polygon(points, std::cerr);
-        plot_guards(guards, std::cerr);
+        print_polygon(points, out);
+        print_guards(guards, out);
         for (const auto &g: guards) {
-            plot_region(general_point_visibility_region(polygon, g), std::cerr);
+            print_region(general_point_visibility_region(polygon, g), out);
         }
     }
 
@@ -57,15 +57,16 @@ int main (int argc, char *argv[]) {
         exit(-1);
     }
 
-    std::string filename = argv[1], algorithm = argv[2];
-    std::ifstream in(filename);
+    std::string in_filename = argv[1], algorithm = argv[2];
+    std::ifstream in(in_filename);
     std::vector<Kernel::Point_2> points;
 
     if (!in) {
-        std::cout << "No such file: " << filename << std::endl;
+        std::cerr << "No such file: " << in_filename << std::endl;
         exit(-1);
     }
 
+    /// Read the gallery
     int n;
     in >> n;
     for (int i = 0; i < n; ++i) {
@@ -74,7 +75,15 @@ int main (int argc, char *argv[]) {
         points.push_back(p);
     }
 
-    process(algorithm, points);
+    /// Solve the problem for the gallery and save the result in a file or print to std::cout
+    if (argc > 3) {
+        std::string out_filename = argv[3];
+        std::ofstream out(out_filename);
+        process(algorithm, points, out);
+        out.close();
+    } else {
+        process(algorithm, points, std::cout);
+    }
 
     return 0;
 }
