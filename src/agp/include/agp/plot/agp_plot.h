@@ -9,18 +9,18 @@
 
 void print_points (const std::vector<Kernel::Point_2> &points, std::ostream &out);
 
-void plot_polygon (const std::vector<Kernel::Point_2> &polygon, std::ostream &out);
+void print_polygon (const std::vector<Kernel::Point_2> &polygon, std::ostream &out);
 
-void plot_guard (Kernel::Point_2 g, std::ostream &out);
+void print_guard (Kernel::Point_2 g, std::ostream &out);
 
-void plot_guards (const std::vector<Kernel::Point_2> &guards, std::ostream &out);
+void print_guards (const std::vector<Kernel::Point_2> &guards, std::ostream &out);
 
-void plot_region (const std::vector<Kernel::Point_2> &polygon, std::ostream &out);
+void print_region (const std::vector<Kernel::Point_2> &polygon, std::ostream &out);
 
-void plot_region (const Arrangement_2 &region, std::ostream &out);
+void print_region (const Arrangement_2 &region, std::ostream &out);
 
 template <typename Point>
-void plot_point (const Point &p, const CGAL::Color &c, std::ostream &out) {
+void print_point (const Point &p, const CGAL::Color &c, std::ostream &out) {
     out << "pnt " << p << " " << c << "\n";
 }
 
@@ -33,7 +33,8 @@ void plot_fisk (const Arrangement &arr, std::ostream &out) {
         do { out << curr->target()->point() << "\n";
         } while (++curr != circ);
 
-        do { plot_point(curr->target()->point(), curr->target()->data(), out);
+        do {
+            print_point(curr->target()->point(), curr->target()->data(), out);
         } while (++curr != circ);
     }
 }

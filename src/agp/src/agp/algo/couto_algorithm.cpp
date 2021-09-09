@@ -15,7 +15,7 @@ void create_model (
         IloModel &model,
         IloNumVarArray &x);
 
-vec_t couto_algorithm(const vec_t &points, std::function<vec_t(const vec_t &)> discretization_method) {
+vec_t couto_algorithm(const vec_t &points, const std::function<vec_t(const vec_t &)>& discretization_method) {
     auto arr_polygon = create_arrangement<Arrangement_2>(points);
     Polygon_2 polygon = create_polygon(points);
 

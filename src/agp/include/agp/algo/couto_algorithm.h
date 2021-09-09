@@ -37,7 +37,7 @@ using vec_t = std::vector<Kernel::Point_2>;
  * @param discretization_method - method used to get the initial discretization of the polygon
  * @return vector of guards
  */
-vec_t couto_algorithm(const vec_t &vertices, std::function<vec_t(const vec_t &)> discretization_method);
+vec_t couto_algorithm(const vec_t &vertices, const std::function<vec_t(const vec_t &)>& discretization_method);
 
 #endif //AGP_EXACT_ALGORITHM_H
 /** @} */
