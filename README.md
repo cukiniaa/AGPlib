@@ -2,7 +2,7 @@ This is a C++ library to solve the art gallery problem, which is an NP-hard prob
 computational geometry and optimisation.
 
 <p align="center">
-<img src="images/couto-stsernin.png" height="300" hspace="20"/> <img src="/images/couto-vonkoch-100-1.png" height="300" hspace="20"/> <img src="/images/couto-rand-60-14.png" height="300" hspace="20"/>
+<img src="images/couto-stsernin.png" height="200" hspace="20"/> <img src="/images/couto-vonkoch-100-1.png" height="200" hspace="20"/> <img src="/images/couto-rand-60-14.png" height="200" hspace="20"/>
 </p>
 
 
