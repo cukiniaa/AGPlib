@@ -1,6 +1,11 @@
 This is a C++ library to solve the art gallery problem, which is an NP-hard problem within the fields of
 computational geometry and optimisation.
 
+
+![Gallery1](./images/couto-stsernin.png) ![Gallery2](./images/couto-vonkoch-100-1.png) ![Gallery1](./images/couto-rand-60-14.png)
+
+<img src="./images/couto-stsernin.png" hspace="20"/> <img src="./images/couto-vonkoch-100-1.png"/>
+
 ## Problem formulation
 
 We define the art gallery problem (AGP) as follows: _Given a gallery or a museum find the minimum number of guards/cameras to watch the interior of the gallery._
@@ -15,10 +20,10 @@ A gallery is represented as a simple polygon \f$P\f$ without holes and guards as
 
 Following alogrithms are provided in the library:
 
- - An algorithm based on @ref fisk\_algo's proof [[1]](#1),
- - @ref ghosh\_algo's approximation algorithm [[2]](#2),
- - @ref couto\_algo's el al. exact algorithm [[3]](#3),
- - @ref baumgartner\_algo's et al. algorithm that solves the point AGP [[4]](#4).
+ - An algorithm based on Fisk's proof [[1]](#1),
+ - Ghosh's approximation algorithm [[2]](#2),
+ - Couto el al. exact algorithm [[3]](#3),
+ - Baumgartner et al. algorithm that solves the point AGP [[4]](#4).
 
 First three algorithms solve the vertex problem (when the guards can be placed only in the vertices). Baumgartner's approach tries to solve the general AGP. All the algorithms take a vector of points representing a gallery and return a vector of guards.
 
