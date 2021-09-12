@@ -1,10 +1,11 @@
 This is a C++ library to solve the art gallery problem, which is an NP-hard problem within the fields of
 computational geometry and optimisation.
 
+<p align="center">
+<img src="images/couto-stsernin.png" height="300" hspace="20"/> <img src="/images/couto-vonkoch-100-1.png" height="300" hspace="20"/> <img src="/images/couto-rand-60-14.png" height="300" hspace="20"/>
+</p>
 
-![Gallery1](/images/couto-stsernin.png) ![Gallery2](/images/couto-vonkoch-100-1.png) ![Gallery3](/images/couto-rand-60-14.png)
 
-<img src="images/couto-stsernin.png" hspace="20"/> <img src="/images/couto-vonkoch-100-1.png"/>
 
 ## Problem formulation
 
