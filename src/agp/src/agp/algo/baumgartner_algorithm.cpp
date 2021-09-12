@@ -3,7 +3,8 @@
 
 using vec_t = std::vector<Kernel::Point_2>;
 
-void visibility_matrix (const wg_placement &wg, IloEnv &env, IloArray<IloNumArray> &A) {
+void visibility_matrix(const wg_placement &wg, IloEnv &env,
+                       IloArray<IloNumArray> &A) {
     IloInt w_size = wg.witnesses.size();
     IloInt g_size = wg.guards.size();
     for (int i = 0; i < w_size; ++i) {
@@ -14,7 +15,8 @@ void visibility_matrix (const wg_placement &wg, IloEnv &env, IloArray<IloNumArra
     }
 }
 
-void guards_model (IloModel &g_model, IloNumVarArray &x, IloArray<IloNumArray> &A, IloEnv &env) {
+void guards_model(IloModel &g_model, IloNumVarArray &x,
+                  IloArray<IloNumArray> &A, IloEnv &env) {
     auto w_size = A.getSize();
     for (int i = 0; i < w_size; ++i) {
         g_model.add(IloScalProd(A[i], x) >= 1);
@@ -22,7 +24,8 @@ void guards_model (IloModel &g_model, IloNumVarArray &x, IloArray<IloNumArray> &
     g_model.add(IloMinimize(env, IloSum(x)));
 }
 
-void witnesses_model (IloModel &w_model, IloNumVarArray &y, IloArray<IloNumArray> &A, IloEnv &env) {
+void witnesses_model(IloModel &w_model, IloNumVarArray &y,
+                     IloArray<IloNumArray> &A, IloEnv &env) {
     auto w_size = A.getSize();
     auto g_size = A[0].getSize();
     for (int j = 0; j < g_size; ++j) {
@@ -35,17 +38,20 @@ void witnesses_model (IloModel &w_model, IloNumVarArray &y, IloArray<IloNumArray
     w_model.add(IloMaximize(env, IloSum(y)));
 }
 
-bool integral_solution (const std::vector<IloNum> &sol) {
-    for (auto g: sol) {
-        if(g > 0 && g < 1)
+bool integral_solution(const std::vector<IloNum> &sol) {
+    for (auto g : sol) {
+        if (g > 0 && g < 1)
             return false;
     }
     return true;
 }
 
-Arrangement_2 overlay_arrangements (const Arrangement_2 &primary, const std::vector<Arrangement_2> &arrangements, const std::vector<int> &chosen) {
+Arrangement_2
+overlay_arrangements(const Arrangement_2 &primary,
+                     const std::vector<Arrangement_2> &arrangements,
+                     const std::vector<int> &chosen) {
     Arrangement_2 arrangement = primary;
-    for (const auto& i: chosen) {
+    for (const auto &i : chosen) {
         Arrangement_2 arr_output;
         overlay(arrangement, arrangements[i], arr_output);
         arrangement = arr_output;
@@ -53,43 +59,56 @@ Arrangement_2 overlay_arrangements (const Arrangement_2 &primary, const std::vec
     return arrangement;
 }
 
-vec_t primary_separation (const Arrangement_2 &guards_overlay, const std::vector<int> &curr_g, const std::vector<IloNum> &x, const std::vector<Arrangement_2> &guard_visibility) {
+vec_t primary_separation(const Arrangement_2 &guards_overlay,
+                         const std::vector<int> &curr_g,
+                         const std::vector<IloNum> &x,
+                         const std::vector<Arrangement_2> &guard_visibility) {
     vec_t found_witnesses;
     auto points = arr_discretization(guards_overlay);
-    for(const auto &c: points) {
+    for (const auto &c : points) {
         IloNum sum = 0;
         for (unsigned i = 0; i < curr_g.size() && sum < 1; ++i) {
             auto ind = curr_g[i];
             sum += x[ind] * point_visible(guard_visibility[ind], c);
         }
-        if (sum < 1) found_witnesses.push_back(c);
+        if (sum < 1)
+            found_witnesses.push_back(c);
     }
     return found_witnesses;
 }
 
-vec_t dual_separation (const Arrangement_2 &witnesses_overlay, const std::vector<int> &curr_w, const std::vector<IloNum> &y, const std::vector<Arrangement_2> &witness_visibility) {
+vec_t dual_separation(const Arrangement_2 &witnesses_overlay,
+                      const std::vector<int> &curr_w,
+                      const std::vector<IloNum> &y,
+                      const std::vector<Arrangement_2> &witness_visibility) {
     vec_t found_guards;
     auto points = arr_discretization(witnesses_overlay);
-    for(const auto &c: points) {
-        if (!found_guards.empty()) break;
+    for (const auto &c : points) {
+        if (!found_guards.empty())
+            break;
         IloNum guards = 0;
         for (unsigned i = 0; guards <= 1 && i < curr_w.size(); ++i) {
             auto ind = curr_w[i];
             guards += y[ind] * point_visible(witness_visibility[ind], c);
         }
-        if (guards > 1) found_guards.push_back(c);
+        if (guards > 1)
+            found_guards.push_back(c);
     }
     return found_guards;
 }
 
-std::vector<int> LP_chosen (std::vector<IloNum> &solution) {
+std::vector<int> LP_chosen(std::vector<IloNum> &solution) {
     std::vector<int> v;
     for (unsigned i = 0; i < solution.size(); ++i)
-        if (solution[i] > 0) v.push_back(i);
+        if (solution[i] > 0)
+            v.push_back(i);
     return v;
 }
 
-vec_t baumgartner_algorithm (const vec_t &points, std::function<wg_placement(const vec_t &)> initial_placement_method, int sec) {
+vec_t baumgartner_algorithm(
+    const vec_t &points,
+    std::function<wg_placement(const vec_t &)> initial_placement_method,
+    int sec) {
     clock_t begin = clock(), end;
     auto polygon = create_arrangement<Arrangement_2>(points);
     wg_placement wg = initial_placement_method(points);
@@ -130,14 +149,18 @@ vec_t baumgartner_algorithm (const vec_t &points, std::function<wg_placement(con
         g_chosen = LP_chosen(x_solved);
         w_chosen = LP_chosen(y_solved);
 
-        Arrangement_2 guards_arrangement = overlay_arrangements(polygon, wg.guard_visibility, g_chosen);
-        Arrangement_2 witnesses_arrangement = overlay_arrangements(polygon, wg.witness_visibility, w_chosen);
+        Arrangement_2 guards_arrangement =
+            overlay_arrangements(polygon, wg.guard_visibility, g_chosen);
+        Arrangement_2 witnesses_arrangement =
+            overlay_arrangements(polygon, wg.witness_visibility, w_chosen);
 
-        auto W = primary_separation(guards_arrangement, g_chosen, x_solved, wg.guard_visibility);
-        for (const auto &w: W) {
+        auto W = primary_separation(guards_arrangement, g_chosen, x_solved,
+                                    wg.guard_visibility);
+        for (const auto &w : W) {
             witness_found = true;
             wg.witnesses.push_back(w);
-            wg.witness_visibility.push_back(general_point_visibility_region(polygon, w));
+            wg.witness_visibility.push_back(
+                general_point_visibility_region(polygon, w));
             A.add(IloNumArray(env, g_size));
             int n = static_cast<int>(A.getSize() - 1);
             for (int j = 0; j < g_size; ++j) {
@@ -150,32 +173,37 @@ vec_t baumgartner_algorithm (const vec_t &points, std::function<wg_placement(con
             current_best_size = g_chosen.size();
         }
 
-        if (!witness_found && integral_solution(x_solved) && upper_bound > g_chosen.size())
+        if (!witness_found && integral_solution(x_solved) &&
+            upper_bound > g_chosen.size())
             upper_bound = g_chosen.size();
 
-        auto G = dual_separation(witnesses_arrangement, w_chosen, y_solved, wg.witness_visibility);
-        for (const auto &g: G) {
+        auto G = dual_separation(witnesses_arrangement, w_chosen, y_solved,
+                                 wg.witness_visibility);
+        for (const auto &g : G) {
             guard_found = true;
             wg.guards.push_back(g);
-            wg.guard_visibility.push_back(general_point_visibility_region(polygon, g));
+            wg.guard_visibility.push_back(
+                general_point_visibility_region(polygon, g));
             unsigned long n = wg.guards.size() - 1;
             for (int i = 0; i < A.getSize(); ++i) {
-                A[i].add(point_visible(wg.guard_visibility[n], wg.witnesses[i]));
+                A[i].add(
+                    point_visible(wg.guard_visibility[n], wg.witnesses[i]));
             }
         }
-        if (!guard_found && lower_bound < g_chosen.size()) lower_bound = g_chosen.size();
+        if (!guard_found && lower_bound < g_chosen.size())
+            lower_bound = g_chosen.size();
 
         w_model.end();
         g_model.end();
 
         end = clock();
 
-    } while ((witness_found || guard_found) && lower_bound < upper_bound && double(end - begin) / CLOCKS_PER_SEC < sec);
+    } while ((witness_found || guard_found) && lower_bound < upper_bound &&
+             double(end - begin) / CLOCKS_PER_SEC < sec);
 
     vec_t solution;
-    for(auto i: current_best) {
+    for (auto i : current_best) {
         solution.push_back(wg.guards[i]);
     }
     return solution;
 }
-

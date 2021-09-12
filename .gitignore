@@ -31,10 +31,14 @@
 *.out
 *.app
 
+# Polygon instances
+*.pol
+
 build
 bin
 cmake
 cmake-build-debug
+documentation
 
 data_out
 data
