@@ -1,3 +1,7 @@
+---
+useMath: true
+---
+
 This is a C++ library to solve the art gallery problem, which is an NP-hard problem within the fields of
 computational geometry and optimisation.
 
@@ -11,11 +15,20 @@ computational geometry and optimisation.
 
 We define the art gallery problem (AGP) as follows: _Given a gallery or a museum find the minimum number of guards/cameras to watch the interior of the gallery._
 
-A gallery is represented as a simple polygon \f$P\f$ without holes and guards as a set of points of \f$P\f$. In this library we sovle the AGP for stationary guards that can be placed, both in the vertices of the polygon or in its interior. 
+A gallery is represented as a simple polygon $P$ without holes and guards as a set of points of $P$. In this library we sovle the AGP for stationary guards that can be placed, both in the vertices of the polygon or in its interior.
 
-\image html images/couto-60-20-polygon.png An example of a gallery. width=500cm
+<p align="center">
+<img src="images/couto-60-20-polygon.png" height="200" hspace="20"/> <br>
+An example of a gallery.
+</p>
 
-\image html images/couto-60-20-guarded.png A solution for the given gallery. width=500cm
+<p align="center">
+<img src="images/couto-60-20-guarded.png" height="200" hspace="20"/> <br>
+A solution for the given gallery.
+</p>
+
+* images were generated using the Python module provided in this repository.
+
 
 ## Algorithms
 
